@@ -1,0 +1,152 @@
+<header class="block header">
+    <div class="component branding">
+        <img src="../assets/images/teromac.png">
+    </div>
+    <div id="sidebar-toggle" (click)="toogleSideMenu()" role="button" tabindex="0"><i class="material-icons"></i>
+    </div>
+</header>
+
+<div class="panel" [ngClass]="isOpen ? 'expanded': 'collapse'">
+    <nav class="block app-menu mdl-navigation">
+        <!-- side-menu -->
+        <ul class="side-menu" >
+            <!-- menu-item -->
+            <li class="menu-item dropdown parent" [ngClass]="{'active': view == 'lab', 'expand': view == 'lab' && expand}">
+                <div class="lab child" (click)="toggleMenu('lab', 'topology')">
+                    <span class="menu-content">
+                        <img src="../assets/images/test-tube.svg" style="width: 24px;"><span *ngIf="isOpen">Lab</span>
+                    </span>
+                    <span class="menu-icon" *ngIf="isOpen">
+                        <i class="material-icons" role="presentation">{{view == 'lab' && this.expand ? "keyboard_arrow_down" : "keyboard_arrow_right"}}</i> 
+                    </span>  
+                </div>
+                <!-- sub-menu -->
+                <ul class="sub-menu" *ngIf="isOpen">
+                    <li class="menu-item">
+                        <div class="topology" [ngClass]="{'active': subView == 'topology'}" (click)="showPanel('lab','topology')" >
+                            <span class="menu-content">
+                                Topology
+                            </span>
+                        </div>
+                    </li>
+                    <li class="menu-item">
+                        <div class="session-info" [ngClass]="{'active': subView == 'session-info'}" (click)="showPanel('lab','session-info')" >
+                            <span class="menu-content">
+                                Session Info
+                            </span>
+                        </div>
+                    </li>
+                    <li class="menu-item">
+                        <div class="lab-detail" [ngClass]="{'active': subView == 'lab-detail'}" (click)="showPanel('lab','lab-detail')" >
+                            <span class="menu-content">
+                                Lab Detail
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+                <!-- /sub-menu -->
+            </li>
+            <!-- /menu-item -->
+            <!-- menu-item -->
+            <li class="menu-item dropdown parent" [ngClass]="{'active': view == 'settings', 'expand': view == 'settings' && expand}">
+                <div class="settings child" (click)="toggleMenu('settings', 'device-settings')">
+                    <span class="menu-content">
+                        <i class="material-icons">settings</i><span *ngIf="isOpen">Settings</span>
+                    </span>
+                    <span class="menu-icon" *ngIf="isOpen">
+                        <i class="material-icons" role="presentation" >{{view == 'settings' && this.expand ? "keyboard_arrow_down" : "keyboard_arrow_right"}}</i> 
+                    </span>  
+                </div>
+                <!-- sub-menu -->
+                <ul class="sub-menu" *ngIf="isOpen">
+                    <li class="menu-item">
+                        <div class="device-settings" [ngClass]="{'active': subView == 'device-settings'}" (click)="showPanel('settings','device-settings')">
+                            <span class="menu-content">
+                                Device Settings
+                            </span>
+                        </div>
+                    </li>
+                    <li *ngIf="false" class="menu-item">
+                        <div class="global-network-test" [ngClass]="{'active': subView == 'global-network-test'}" (click)="showPanel('settings','global-network-test')">
+                            <span class="menu-content">
+                                Global Network Test
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+                <!-- /sub-menu -->
+            </li>
+            <!-- /menu-item -->
+            <!-- menu-item -->
+            <li *ngIf="this.instructor" class="menu-item dropdown parent" [ngClass]="{'active': view == 'support'}">
+                <div class="support child" (click)="showPanel('support','')">
+                    <span class="menu-content">
+                        <i class="material-icons">contact_support</i><span *ngIf="isOpen">Support</span>
+                    </span>
+                </div>
+            </li>
+            <!-- /menu-item -->            
+        </ul>
+        <!-- /side-menu -->
+    </nav>
+    <nav class="block devices-menu mdl-navigation">
+        <!-- side-menu -->
+        <ul class="side-menu">
+            <!-- menu-item -->
+            <li class="menu-item disable-click">
+                <div class="parent">
+                    <span class="menu-content">
+                        <i class="material-icons" role="presentation" >storage</i><span *ngIf="isOpen">Devices</span>
+                    </span>
+                </div>
+                <!-- sub-menu -->
+                <ul class="sub-menu" *ngIf="isOpen">
+                    <li class="menu-item" *ngIf="isError">
+                        <div class="device error">Error getting device list</div>
+                    </li>
+                    <li class="menu-item" [ngClass]="{'first': i == 0}" *ngFor="let device of devices;let i = index;">
+                        <div class="device text-align-right" [ngClass]="{'active': devices[i].selected}">
+                            <span class="device icon float-left name" (click)="initConnect(devices[i])" title={{device.display_name}}>
+                                <i class="material-icons" role="presentation" *ngIf="device.connection == 'rdp'">laptop</i>
+                                <img src="../assets/images/{{device.connection | lowercase}}.png" *ngIf="device.connection != 'rdp'" class="device-icon"/>
+                                    {{device.display_name}}
+                            </span>
+                            <span class="settings icon" (click)="setting(devices[i])" *ngIf="false">
+                                <i class="material-icons" role="presentation" >settings_applications</i> 
+                            </span> 
+                            <span class="fullscreen-icon icon" (click)="fullscreen(devices[i])" [ngClass]="{'disconnected': !devices[i].connected}">
+                                <i class="material-icons" role="presentation" >crop_free</i> 
+                            </span>                                                                
+                            <span class="connect icon" (click)="connect(devices[i])">
+                                    <img src="../assets/images/{{ devices[i].connected ? 'plugged.svg' : 'unplugged.svg'}}" >
+                            </span>
+                                
+                        </div>
+                    </li>
+                </ul>
+                <!-- /sub-menu -->
+            </li>
+            <!-- /menu-item -->
+        </ul>
+        <!-- /side-menu -->
+    </nav>
+    <!--
+    <div class="tab-dropdown mdl-shadow--4dp active">
+        <div class="mdl-textfield region mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height is-upgraded is-dirty" data-upgraded=",MaterialTextfield">
+            <input type="text" value="" class="mdl-textfield__input" id="region" readonly="">
+            <input type="hidden" value="op1" name="region">
+            <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+            <label for="region" class="mdl-textfield__label">Region</label>
+            <div class="mdl-menu__container is-upgraded" style="width: 200px; height: 106px;"><div class="mdl-menu__outline mdl-menu--bottom-left" style="width: 200px; height: 106px;"></div><ul for="region" class="mdl-menu mdl-menu--bottom-left mdl-js-menu is-animating" data-upgraded=",MaterialMenu" style="">
+                <li class="mdl-menu__item selected" data-val="op1" data-selected="true" tabindex="-1">N. America(E)  </li>
+                <li class="mdl-menu__item" data-val="op2" tabindex="-1">Direct to LabGear</li>
+                <li class="mdl-menu__item" data-val="op3" tabindex="-1">Auto</li>
+            </ul></div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised" data-upgraded=",MaterialButton">
+        Save
+        </button>
+    </div>
+    -->    
+</div>
+

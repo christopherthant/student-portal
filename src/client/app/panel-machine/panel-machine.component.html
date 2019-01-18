@@ -1,0 +1,31 @@
+<!-- panel:running mdl-color--white mdl-shadow--2dp mdl-grid-->
+<div id="machine-container" class="panel machine mdl-cell mdl-cell--12-col"
+     [ngClass]="{'active': defaultView.menu == 'machine'}" style="" #machine>
+    <div class="status" [ngClass]="{'connected': connected}">
+     	<div class="device" [ngClass]="{'connected': connected}">
+			<div class="text">
+			  CONNECTING
+			</div>
+			<div class="box">
+			  <div class="comp"></div>
+			  <div class="loader"></div>
+			  <div class="con"></div>
+			  <div class="byte"></div>
+			  <div class="server"></div>
+			</div>
+     	</div>
+     	<span class="error" [ngClass]="{'show': error}">Connection Error.  Use the Settings menu for device control and to confirm status.  If you need further assistance, please consult your instructor.</span>
+    </div>
+
+	<div class="clipboard" [ngClass]="{'close': clipboardClosed}">
+		<div>
+			<div class="title">Clipboard</div> 
+			<div class="close" (click)="close()"><i class="material-icons" role="presentation">chevron_left</i></div>
+		</div>			
+		<p>Text copied/cut within remote device will appear here. Changes to the text below will affect the remote clipboard.</p>
+		<textarea class="text-input" [(ngModel)]="clipBoard"></textarea>
+		<div class="command" (click)="copy()"><i class="material-icons" role="presentation">file_copy</i><span class="copy">> COPY</span></div>
+	</div>     
+</div>
+
+<!-- /panel:running-->

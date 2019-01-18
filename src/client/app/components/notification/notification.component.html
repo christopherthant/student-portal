@@ -1,0 +1,10 @@
+<!--
+  <div class="mdl-snackbar__text"></div>
+  <button class="mdl-snackbar__action" type="button"></button>
+-->
+<mat-dialog-content>
+ {{notificationMessage}}
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close(false)">Close</button>
+</mat-dialog-actions>

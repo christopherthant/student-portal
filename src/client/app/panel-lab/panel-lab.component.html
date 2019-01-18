@@ -1,0 +1,67 @@
+<!--panel:lab-->
+<div class="panel lab mdl-layout mdl-layout--fixed-header mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid" [ngClass]="{'active': defaultView.menu == 'lab'}">
+        <main class="mdl-layout__content">    
+            <div class="mdl-tabs is-upgraded">
+                <div class="mdl-tabs__tab-bar">
+                    <span class="topology mdl-tabs__tab" [ngClass]="{'is-active': defaultView.submenu == 'topology'}" (click)="showPanel('lab','topology')">Topology</span>
+                    <span class="session-info mdl-tabs__tab" [ngClass]="{'is-active': defaultView.submenu == 'session-info'}" (click)="showPanel('lab','session-info')">Session Info</span>
+                    <span class="lab-detail mdl-tabs__tab" [ngClass]="{'is-active': defaultView.submenu == 'lab-detail'}" (click)="showPanel('lab','lab-detail')">Lab Detail</span>
+                </div>
+                <div class="mdl-tabs__panel" [ngClass]="{'is-active': defaultView.submenu == 'topology'}">
+                    <span *ngIf="isTopologyError">Error!</span>
+                    <img *ngIf="!isTopologyError" src="{{topologyImage}}" style="width: 800px;"/>
+                </div>
+                <div class="mdl-tabs__panel" [ngClass]="{'is-active': defaultView.submenu == 'session-info'}">
+                    <table class="mdl-data-table mdl-shadow--1dp">
+                        <tbody>
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric"> <b>Lab Name:</b></td>
+                            <td class="mdl-data-table__cell--non-numeric" >{{lab.labName}}</td>
+                        </tr>
+                        <!--
+                        <tr >
+                            <td class="mdl-data-table__cell--non-numeric"><b>Instructor Name:</b> </td>
+                            <td class="mdl-data-table__cell--non-numeric" >{{lab.instructorName}}</td>
+                        </tr>
+                        -->
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric"> <b>Loggedin User:</b> </td>
+                            <td  class="mdl-data-table__cell--non-numeric" >{{lab.userName}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric"><b>Event Id: </b></td>
+                            <td class="mdl-data-table__cell--non-numeric" >{{lab.event}}</td>
+                        </tr>
+                        <!--
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric"><b>Total Time:</b> </td>
+                            <td class="mdl-data-table__cell--non-numeric" >{{lab.totalTime}} (hh.mm)</td>
+                        </tr>
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric"><b>Remaining Time:</b> </td>
+                            <td class="mdl-data-table__cell--non-numeric" >{{lab.remainingTime}} (hh:mm)</td>
+                        </tr>
+                        -->
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric"><b>Sessions: </b></td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <div *ngIf="isSessionError" class="error">Error getting sessions</div>
+                                <div *ngFor="let usedSession of usedSessions">
+                                    {{usedSession.startTime}} - {{usedSession.endTime}} 
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mdl-tabs__panel" [ngClass]="{'is-active': defaultView.submenu == 'lab-detail'}">
+                    <span *ngIf="isLabinfoError" class="error">Error getting Lab Detail!</span>
+                    <ngx-md [data]="labInfo" *ngIf="!isLabinfoError"></ngx-md>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- /panel:lab-->
+    

@@ -1,0 +1,88 @@
+<!-- region header -->
+<div class="region header mdl-layout__header">
+<!-- mdl-layout__header-row -->
+<div class="mdl-layout__header-row">
+    <!-- main-menu lab-->
+    <nav class="block main-menu lab mdl-navigation mdl-layout--large-screen-only">
+            <!-- menu-item -->
+            <span class="mdl-navigation__link">
+                <span class="menu-icon">
+                    <i class="material-icons" role="presentation" >ic_device_hub</i> 
+                </span>  
+                <span class="menu-content">
+                    <span class="label">
+                        Pod:
+                    </span>
+                    <span class="value">
+                        {{pod}}
+                    </span>
+                </span>
+            </span>
+            <!-- /menu-item -->
+            <!-- menu-item -->
+            <span class="mdl-navigation__link" *ngIf="device.name">
+                <span class="menu-icon">
+                    <i class="material-icons" role="presentation" >laptop</i> 
+                </span>  
+                <span class="menu-content">
+                    <span class="label">
+                        Device: 
+                    </span>
+                    <span class="value">
+                        {{device.display_name}}
+                    </span>
+                </span>
+            </span>
+            <!-- /menu-item -->
+            <!-- menu-item -->
+            <span class="mdl-navigation__link" *ngIf="false">
+                <span class="menu-icon">
+                    <i class="material-icons" role="presentation" >network_cell</i> 
+                </span>  
+                <span class="menu-content">
+                    <span class="label">
+                        Online:
+                    </span>
+                    <span class="value">
+                        {{totalTime}}
+                    </span>
+                </span>
+            </span>
+            <!-- /menu-item -->
+            <!-- menu-item -->
+            <span class="mdl-navigation__link">
+                <span class="menu-icon">
+                    <i class="material-icons" role="presentation" >av_timer</i> 
+                </span>  
+                <span class="menu-content">
+                    <span class="label">
+                        Time left:
+                    </span>
+                    <span class="value">
+                        {{remainingTime | async}}
+                    </span>
+                </span>
+            </span>
+            <!-- /menu-item -->
+        </nav>
+        <!-- /main-menu lab-->
+    <div class="mdl-layout-spacer"></div>
+    <!-- main-menu user-->
+    <nav class="block main-menu user mdl-navigation mdl-layout--large-screen-only">
+            <!-- menu-item -->
+            <span class="mdl-navigation__link" href="#">
+                    {{userId}}
+                <i class="material-icons">account_circle</i>
+            </span>
+            <!-- /menu-item -->
+            <!-- menu-item -->
+            <span (click)= "logout()" class="mdl-navigation__link ff-link">
+                <i class="material-icons">exit_to_app</i>
+            </span>
+            <!-- /menu-item -->
+        </nav>
+        <!-- /main-menu user-->
+</div>
+<!-- /mdl-layout__header-row -->
+</div>
+<!-- /region header -->

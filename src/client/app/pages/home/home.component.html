@@ -1,0 +1,30 @@
+
+<!-- container front logged-in -->
+<div class="container front logged-in mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    <!-- region header -->
+    <app-header></app-header>
+    <!-- /region header -->
+    <!-- region sidebar -->
+    <div class="region sidebar  mdl-layout__drawer">
+        <app-sidebar></app-sidebar>
+    </div>
+    <!-- /region sidebar -->
+    
+    <!-- region main-->
+    <main class="region main mdl-layout__content mdl-color--grey-100">
+        <div class="block content mdl-grid ">
+            <app-panel-device [defaultView]='defaultView' style="width:99%"></app-panel-device>
+            <app-panel-lab [defaultView]='defaultView' style="width:99%"></app-panel-lab>
+            <app-panel-settings [defaultView]='defaultView' style="width:99%"></app-panel-settings>
+            <app-support [defaultView]='defaultView' style="width:99%"></app-support>
+            <app-panel-machine [defaultView]='defaultView' style="width:calc(100% - 5px)"></app-panel-machine>
+        </div>
+    </main>
+    <!-- /region main-->
+    <!-- region main-->
+    <!--<app-main class="region main mdl-layout__content mdl-color--grey-100" [currentView]='currentView'></app-main>       -->
+    <!-- /region main-->
+    <!-- region noti-->
+    <!--<app-notification id="toast" class="mdl-js-snackbar mdl-snackbar"></app-notification>-->
+    <!-- region noti-->
+<!-- /container front logged-in -->

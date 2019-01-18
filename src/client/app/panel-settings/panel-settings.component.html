@@ -1,0 +1,116 @@
+    <!--panel:devices-->
+    <div class="panel settings devices mdl-layout mdl-layout--fixed-header mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid" [ngClass]="{'active': defaultView.menu == 'settings'}">
+          <main class = "mdl-layout__content">    
+            <div class = "mdl-tabs is-upgraded">
+                <div class = "mdl-tabs__tab-bar">
+                    <span class = "device-settings mdl-tabs__tab" [ngClass]="{'is-active': defaultView.submenu == 'device-settings'}" (click)="showPanel('settings','device-settings')">Device Settings</span>
+                    <span *ngIf="false" class = "global-network-test mdl-tabs__tab" [ngClass]="{'is-active': defaultView.submenu == 'global-network-test'}" (click)="showPanel('settings','global-network-test')">Global Network Test</span>
+                </div>
+                <div class="settings-warning" *ngIf="isLocked">
+                  Automation Warning!! Automation is currently running! Do not access devices or device controls until the automation job has completed-if you do, the lab may become unusable. Click the Refresh button for updated automation status. Please ask your instructor for assistance.                  
+                </div>
+                <!-- mdl-tabs__panel -->
+                <div id="device-settings" class = "mdl-tabs__panel" [ngClass]="{'is-active': defaultView.submenu == 'device-settings'}">
+                    <!-- inner -->
+                    <div class="inner">
+                      <button class="mdl-button mdl-js-button mdl-button--raised" (click)="refresh()">
+                      <i class="material-icons" [ngClass]="{'spinning': isRefresh}">autorenew</i> Refresh
+                      </button> 
+                      <span class="refresh" [ngClass]="{'show': isRefresh}">Checking device status...</span>
+                      <span class="refresh error" [ngClass]="{'show': isRefreshError}">Error refreshing device status</span>
+                      <table class="mdl-data-table">
+                        <thead>
+                          <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Name</th>
+                            <th class="mdl-data-table__cell--non-numeric">
+                              Status                             
+                            </th>
+                            <th class="mdl-data-table__cell--non-numeric">Clearline</th>
+                            <th class="mdl-data-table__cell--non-numeric">Baseline</th>
+                            <th class="mdl-data-table__cell--non-numeric">Reboot</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let device of devices;let i = index;">
+                            <td class="mdl-data-table__cell--non-numeric vertical-aligned">
+                              <i class="material-icons" role="presentation">laptop</i> {{devices[i].display_name}}
+                            </td>
+                            <td>
+                              <i class="material-icons" [ngClass]="deviceStatus[device.name]">{{deviceIcons[deviceStatus[device.name]]}}</i>
+                            </td>
+                            <td class="">
+                              <span class="reboot" [ngClass]="{'error': devices[i].clearlineError}" *ngIf="devices[i].can_clear_line" (click)="clearline(devices[i])">
+                                  <i class="material-icons" [ngClass]="{'spinning': devices[i].status == 'clearline'}">autorenew</i>
+                                  <span class="menu-content">{{devices[i].clearlineError}}</span>
+                              </span>
+                              <div class="ff-dummy-space" *ngIf="!devices[i].can_clear_line"></div>
+                            </td>                                          
+                            <td class="">
+                              <span class="reboot" [ngClass]="{'error': devices[i].baselineError}" *ngIf="devices[i].can_baseline_device" (click)="baseline(devices[i])">
+                                  <i class="material-icons" [ngClass]="{'spinning': devices[i].status == 'baseline'}">autorenew</i>
+                                  <span class="menu-content">{{devices[i].baselineError}}</span>
+                              </span>
+                              <div class="ff-dummy-space" *ngIf="!devices[i].can_baseline_device"></div>
+                            </td>
+                            <td class="">
+                              <span class="reboot" [ngClass]="{'error': devices[i].rebootError}" *ngIf="devices[i].can_reboot_device" (click)="reset(devices[i])">
+                                  <i class="material-icons" [ngClass]="{'spinning': devices[i].status == 'reboot'}">autorenew</i>
+                                  <span class="menu-content">{{devices[i].rebootError}}</span>
+                              </span>
+                              <div class="ff-dummy-space" *ngIf="!devices[i].can_reboot_device"></div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="mdl-data-table" *ngIf="baselineList.length > 0">
+                        <thead>
+                          <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Name</th>
+                            <th class="mdl-data-table__cell--non-numeric">Baseline</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let device of baselineList;let i = index;">
+                            <td class="mdl-data-table__cell--non-numeric vertical-aligned">
+                              <i class="material-icons" role="presentation">laptop</i> {{baselineList[i].name}}
+                            </td>                                       
+                            <td class="">
+                              <span class="reboot" [ngClass]="{'status': baselineList[i].status}" (click)="control(baselineList[i])">
+                                  <i class="material-icons" [ngClass]="{'spinning': baselineList[i].controlIcon == 'autorenew'}">{{baselineList[i].controlIcon || 'settings_power'}}</i>
+                                  <span class="menu-content">{{baselineList[i].status}}</span>
+                              </span>
+                              <div class="ff-dummy-space" *ngIf="false"></div>
+                            </td>
+                          </tr>
+                        </tbody>                          
+                      </table>
+                      <table class="mdl-data-table" *ngIf="lab_controls.length > 0">
+                        <thead>
+                          <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Type</th>
+                            <th class="mdl-data-table__cell--non-numeric">Run</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let device of lab_controls;let i = index;">
+                            <td class="mdl-data-table__cell--non-numeric vertical-aligned">
+                              <i class="material-icons" role="presentation">laptop</i> {{lab_controls[i].name}}
+                            </td>                                       
+                            <td class="">
+                              <span class="reboot" [ngClass]="{'status': lab_controls[i].status}" (click)="control(lab_controls[i])">
+                                  <i class="material-icons" [ngClass]="{'spinning': lab_controls[i].controlIcon == 'autorenew'}">{{lab_controls[i].controlIcon || 'settings_power'}}</i>
+                                  <span class="menu-content">{{lab_controls[i].status}}</span>
+                              </span>
+                              <div class="ff-dummy-space" *ngIf="false"></div>
+                            </td>
+                          </tr>
+                        </tbody>                          
+                      </table>                                        
+                    </div>
+                    <!-- /inner -->
+                </div>
+                <!-- /mdl-tabs__panel -->
+            </div>
+        </main>
+    </div>
+    <!-- /panel:devices-->

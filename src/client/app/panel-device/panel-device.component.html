@@ -1,0 +1,34 @@
+    <!--panel:default-->
+    <div class="panel default mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid" [ngClass]="{'active':defaultView.menu == 'device'}">
+      <main class = "mdl-layout__content">    
+          <div class = "mdl-tabs mdl-js-tabs">
+              <div class = "mdl-tabs__tab-bar">
+                  <a href = "#default" class = "mdl-tabs__tab" [ngClass]="{'is-active':defaultView.submenu == 'connect-to-device'}">Connect to device</a>
+              </div>
+              <div class = "mdl-tabs__panel" [ngClass]="{'is-active':defaultView.submenu == 'connect-to-device'}" id = "default">
+                  <div class="mdl-grid center-items">
+                      <div class="device-switch mdl-cell mdl-cell--4-col">
+                          <div class="label">
+                              <span>
+                                  <i class="material-icons" role="presentation">laptop</i> 
+                              </span>
+                              <span class="menu-content">
+                                  {{defaultView.device ? defaultView.device.display_name : ''}}
+                              </span>
+                          </div>
+                          <div class="switch" (click)="connect(defaultView.device)">
+                              <span class="conntect">
+                                  <span class="connect-text">CONNECT</span>
+                              </span>
+                              <!-- <span class="menu-content">
+                                  <img class="switch-img" src="../assets/images/power-button-off.svg" style="width: 48px;">
+                              </span> -->
+                          </div>
+                          <div id="device-loading-bar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </main>
+  </div> 
+  <!-- /panel:default-->
